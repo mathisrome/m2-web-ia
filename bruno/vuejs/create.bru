@@ -1,0 +1,21 @@
+meta {
+  name: create
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost/api/apartments
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 8,
+    "nbRooms": 3,
+    "surface": 4,
+    "nbWindows": 5,
+    "price": 30000
+  }
+}

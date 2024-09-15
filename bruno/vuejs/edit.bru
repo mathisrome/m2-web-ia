@@ -1,0 +1,25 @@
+meta {
+  name: edit
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost/api/apartments/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 5
+}
+
+body:json {
+  {
+    "id": 5,
+    "nbRooms": 3,
+    "surface": 4,
+    "nbWindows": 5,
+    "price": 299
+  }
+}

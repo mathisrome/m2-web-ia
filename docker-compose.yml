@@ -1,0 +1,53 @@
+services:
+  mariadb:
+    image: mariadb:11.1.2
+    restart: unless-stopped
+    volumes:
+      - ./infra/volumes/dev/database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MARIADB_DATABASE: apartment
+    ports:
+      - "3306:3306"
+
+  symfony-php:
+    build:
+      context: ./infra/dev/symfony-php
+    volumes:
+      - ./infra/volumes/dev/composer:/root/.composer
+      - ./infra/dev/symfony-php/project.ini:/usr/local/etc/php/conf.d/project.ini:ro
+      - ./api:/var/www/api
+    depends_on:
+      - mariadb
+    tty: true
+
+  symfony-nginx:
+    image: nginx:latest
+    volumes:
+      - ./infra/volumes/dev/logs/nginx:/var/log/nginx
+      - ./infra/dev/symfony-nginx/virtualhost.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./api:/var/www/api
+    ports:
+      - "80:80"
+    depends_on:
+      - symfony-php
+    tty: true
+
+  vite:
+    build:
+      context: ./infra/dev/vite
+    ports:
+      - 5173:5173
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - ./app:/var/www/app
+
+  python:
+    build:
+      context: infra/dev/python
+    command: python api.py
+    ports:
+      - 5001:5000
+    volumes:
+      - ./python:/var/www/python
+      - ./api/public/apartment.csv:/var/www/python/apartment.csv
