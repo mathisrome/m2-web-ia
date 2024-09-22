@@ -3,7 +3,8 @@
 Lancer la commande suivante :
 
 ```shell
-docker compose up -d
+docker compose up -d && \
+docker compose exec symfony-php composer install
 ```
 
 # Mise à jour des données de test
@@ -18,4 +19,4 @@ docker compose exec symfony-php php bin/console d:f:l
 
 Vous trouverez le rendu du DM dans le fichier `python/rendu.ipynb`
 
-Toutes l'infrastructure est automatiquement lancée via la commande de démarrage ci-dessus.
+Toute l'infrastructure est automatiquement lancée via la commande de démarrage ci-dessus.
